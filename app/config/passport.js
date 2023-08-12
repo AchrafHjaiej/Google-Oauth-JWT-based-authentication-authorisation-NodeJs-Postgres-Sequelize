@@ -71,16 +71,36 @@ function passportConfig(passport) {
             });
     });
 }
+const { v4: uuidv4 } = require('uuid');
+
 
 function signup(req, res) {
+    const uniqueId = uuidv4();
+    const token = jwt.sign({ id: uniqueId }, config.secret, {
+        algorithm: 'HS256',
+        expiresIn: 86400 // expires in 24 hours
+    });
+   
     User.create({
+        id: uniqueId,   // Use the generated UUID here
         name: req.body.name,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        api_type: "JWT",
+        token: token,
     })
     .then(user => {
+        const token = jwt.sign({ id: uniqueId }, config.secret, {
+            algorithm: 'HS256',
+            expiresIn: 86400 // expires in 24 hours
+        });
+
         if (req.body.roles) {
             Role.findAll({
+                
+
+             
+
                 where: {
                     name: {
                         [Op.or]: req.body.roles
@@ -89,6 +109,7 @@ function signup(req, res) {
             }).then(roles => {
                 user.setRoles(roles).then(() => {
                     res.send({ message: "User registered successfully!" });
+                    accessToken: token
                 });
             });
         } else {
@@ -98,6 +119,8 @@ function signup(req, res) {
         }
     })
     .catch(err => {
+        console.log(req.body);
+
         res.status(500).send({ message: err.message });
     });
 }

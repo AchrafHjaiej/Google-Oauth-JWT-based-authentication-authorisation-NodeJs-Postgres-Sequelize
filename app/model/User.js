@@ -8,17 +8,21 @@ module.exports = (sequelize, Sequelize) => {
   
 const User = sequelize.define('User', {
   id: {
-    type: Sequelize.STRING,
-    primaryKey: true
+    type: Sequelize.UUID,
+    primaryKey: true,
+    defaultValue: Sequelize.UUIDV4
+   ,allowNull: false,
   //,autoIncrement: true,
   },
   api_type: {
-    type: Sequelize.STRING
-    ,allowNull: false,
+    type: Sequelize.STRING,
+    defaultValue: "JWT Based Authentication & Authorisation" // Replace "defaultApiType" with whatever default value you want.
+    //,allowNull: true,
   },
   token: {
-    type: Sequelize.STRING
-    ,allowNull: false,
+    type: Sequelize.STRING,
+    defaultValue: "defaultTokenValue" // Replace with an appropriate default value.
+    //,allowNull: false,
   },
   email: {
     type: Sequelize.STRING

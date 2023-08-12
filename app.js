@@ -32,8 +32,6 @@ db.sequelize.sync({ force: false }) // Don't force sync, as it drops the table i
   }
 }
 
-// Call the syncDatabase function to create the User table
-syncDatabase();
 
 // development error handler
 // will print stacktrace
